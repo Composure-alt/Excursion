@@ -15,8 +15,8 @@ import java.util.List;
 public class Main {
 
     private JFrame frame;
-    private JTextField hotelField;
-    private JTextField hotelRoomField;
+    private JComboBox<String> hotelComboBox;
+    private JComboBox<String> hotelRoomComboBox;
     private JTextField rideTicketsField;
     private JTextField restaurantField;
     private JTextField roomServiceField;
@@ -33,12 +33,18 @@ public class Main {
         panel.setLayout(new GridLayout(9, 2));
 
         panel.add(new JLabel("Отель:"));
-        hotelField = new JTextField();
-        panel.add(hotelField);
+        hotelComboBox = new JComboBox<>(new String[]{"Броско", "Восход", "Bridge Resort", "Богатырь", "Фрегат", "Коринтия"});
+        hotelComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateHotelRoomComboBox();
+            }
+        });
+        panel.add(hotelComboBox);
 
         panel.add(new JLabel("Бронирование номера в отеле (номер комнаты):"));
-        hotelRoomField = new JTextField();
-        panel.add(hotelRoomField);
+        hotelRoomComboBox = new JComboBox<>();
+        panel.add(hotelRoomComboBox);
 
         panel.add(new JLabel("Билеты на аттракцион (название аттракциона):"));
         rideTicketsField = new JTextField();
@@ -48,7 +54,7 @@ public class Main {
         restaurantField = new JTextField();
         panel.add(restaurantField);
 
-        panel.add(new JLabel("Заказ еды и напитков в номер (№ номера, заказ):"));
+        panel.add(new JLabel("Заказ еды и напитков в номер (заказ):"));
         roomServiceField = new JTextField();
         panel.add(roomServiceField);
 
@@ -75,13 +81,52 @@ public class Main {
 
         frame.add(panel);
         frame.setVisible(true);
+
+        updateHotelRoomComboBox();
+    }
+
+    private void updateHotelRoomComboBox() {
+        String selectedHotel = (String) hotelComboBox.getSelectedItem();
+        hotelRoomComboBox.removeAllItems();
+        switch (selectedHotel) {
+            case "Броско":
+                for (int i = 1; i <= 25; i++) {
+                    hotelRoomComboBox.addItem(String.valueOf(i));
+                }
+                break;
+            case "Восход":
+                for (int i = 1; i <= 80; i++) {
+                    hotelRoomComboBox.addItem(String.valueOf(i));
+                }
+                break;
+            case "Bridge Resort":
+                for (int i = 1; i <= 10; i++) {
+                    hotelRoomComboBox.addItem(String.valueOf(i));
+                }
+                break;
+            case "Богатырь":
+                for (int i = 1; i <= 125; i++) {
+                    hotelRoomComboBox.addItem(String.valueOf(i));
+                }
+                break;
+            case "Фрегат":
+                for (int i = 1; i <= 315; i++) {
+                    hotelRoomComboBox.addItem(String.valueOf(i));
+                }
+                break;
+            case "Коринтия":
+                for (int i = 1; i <= 66; i++) {
+                    hotelRoomComboBox.addItem(String.valueOf(i));
+                }
+                break;
+        }
     }
 
     private void createTour() {
         try {
             Excursion tour = new Excursion.TourBuilder()
-                    .setHotel(hotelField.getText())
-                    .sethotelRoom(hotelRoomField.getText())
+                    .setHotel((String) hotelComboBox.getSelectedItem())
+                    .sethotelRoom((String) hotelRoomComboBox.getSelectedItem())
                     .setRideTickets(rideTicketsField.getText())
                     .setRestaurantReservation(restaurantField.getText())
                     .setRoomServiceOrder(roomServiceField.getText())
